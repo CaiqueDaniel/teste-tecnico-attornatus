@@ -1,6 +1,5 @@
 package com.attornatus.testetecnico.unit;
 
-import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,12 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-@Profile("test")
 public class PersonTests {
     @Autowired
     private MockMvc mockMvc;
@@ -35,8 +32,6 @@ public class PersonTests {
     @Test
     public void createPersonTest() throws Exception {
         String json = PersonTests.asJson(PersonTests.factoryPersonDto());
-
-        System.out.println(PersonTests.factoryPostResponse());
 
         this.mockMvc.perform(
                         post("/api/pessoas")
@@ -66,11 +61,11 @@ public class PersonTests {
         List<Map<String, String>> addresses = new ArrayList<>();
         Map<String, String> address = new HashMap<>();
 
-        address.put("cidade_principal", "São Paulo");
-        address.put("estado_principal", "São Paulo");
-        address.put("cep_principal", "03800-000");
-        address.put("logradouro_principal", "Rua teste");
-        address.put("numero_principal", "123");
+        address.put("cidade", "São Paulo");
+        address.put("estado", "São Paulo");
+        address.put("cep", "03800-000");
+        address.put("logradouro", "Rua teste");
+        address.put("numero", "123");
 
         addresses.add(address);
 
