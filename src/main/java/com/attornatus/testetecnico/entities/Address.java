@@ -1,5 +1,6 @@
 package com.attornatus.testetecnico.entities;
 
+import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,12 +38,26 @@ public class Address extends Model {
     @ManyToOne(cascade = CascadeType.REMOVE)
     private Person person;
 
+    @Setter
+    private boolean isMain;
+
     public Address(PersonAndAddressRequestDto dto, Person person) {
         this.city = dto.cidade_principal;
         this.state = dto.estado_principal;
         this.street = dto.logradouro_principal;
         this.number = dto.numero_principal;
         this.zipCode = dto.cep_principal;
+        this.isMain = true;
+        this.person = person;
+    }
+
+    public Address(AddressRequestDto dto, Person person) {
+        this.city = dto.cidade;
+        this.state = dto.estado;
+        this.street = dto.logradouro;
+        this.number = dto.numero;
+        this.zipCode = dto.cep;
+        this.isMain = dto.endereco_principal;
         this.person = person;
     }
 }
