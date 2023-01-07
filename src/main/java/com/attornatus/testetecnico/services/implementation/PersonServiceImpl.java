@@ -3,6 +3,7 @@ package com.attornatus.testetecnico.services.implementation;
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
 import com.attornatus.testetecnico.entities.Person;
+import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.repositories.PersonRepository;
 import com.attornatus.testetecnico.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person getOne(Long id) {
-        Optional<Person> response = Optional.of(this.personRepository.getReferenceById(id));
+        Optional<Person> response = this.personRepository.findById(id);
 
-        if(response.isEmpty())
-            throw new RuntimeException();
+        if (response.isEmpty())
+            throw new NotFoundException();
 
         return response.get();
     }
