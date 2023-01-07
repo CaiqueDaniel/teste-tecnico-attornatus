@@ -5,8 +5,8 @@ import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
 import com.attornatus.testetecnico.dtos.responses.PersonResponseDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
+import com.attornatus.testetecnico.services.AddressService;
 import com.attornatus.testetecnico.services.PersonService;
-import com.attornatus.testetecnico.services.implementation.AddressServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class PersonController {
     private PersonService personService;
 
     @Autowired
-    private AddressServiceImpl addressService;
+    private AddressService addressService;
 
     @PostMapping("/pessoas")
     public ResponseEntity<PersonResponseDto> create(@RequestBody @Valid PersonAndAddressRequestDto dto) {
