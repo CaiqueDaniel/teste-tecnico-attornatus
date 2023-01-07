@@ -3,10 +3,12 @@ package com.attornatus.testetecnico.unit;
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
+import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.services.AddressService;
 import com.attornatus.testetecnico.services.PersonService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +64,7 @@ public class AddressUnitTests {
     public void editAddress() {
         AddressRequestDto addressRequestDto = AddressUnitTests.factoryAddressRequestDto();
         Person person = this.personService.create(PersonUnitTests.factoryPersonRequestDto());
-        Address address = this.addressService.create(AddressUnitTests.factoryAddressRequestDto(), person);
+        Address address = this.addressService.create(addressRequestDto, person);
 
         addressRequestDto.endereco_principal = false;
         addressRequestDto.cidade = "Rio de Janeiro";
@@ -82,6 +84,25 @@ public class AddressUnitTests {
         assertThat(address.getState()).isEqualTo(addressTest.getState());
         assertThat(address.getZipCode()).isEqualTo(addressTest.getZipCode());
         assertThat(address.isMain()).isEqualTo(addressTest.isMain());
+    }
+
+    @Test
+    public void changeMainAddress() {
+        Person person = this.personService.create(PersonUnitTests.factoryPersonRequestDto());
+
+        AddressRequestDto addressRequestDto = AddressUnitTests.factoryAddressRequestDto();
+        addressRequestDto.endereco_principal = false;
+
+        Address address = this.addressService.create(addressRequestDto, person);
+        Address mainAddress = this.addressService.editMainAddress(address);
+
+        assertThat(address.getPerson().getId()).isEqualTo(mainAddress.getPerson().getId());
+        assertThat(address.getCity()).isEqualTo(mainAddress.getCity());
+        assertThat(address.getStreet()).isEqualTo(mainAddress.getStreet());
+        assertThat(address.getNumber()).isEqualTo(mainAddress.getNumber());
+        assertThat(address.getState()).isEqualTo(mainAddress.getState());
+        assertThat(address.getZipCode()).isEqualTo(mainAddress.getZipCode());
+        assertThat(address.isMain()).isEqualTo(true);
     }
 
     @Test
@@ -118,6 +139,18 @@ public class AddressUnitTests {
         List<Address> addresses = this.addressService.getAll(person, 1);
 
         assertThat(addresses).isNotEmpty();
+    }
+
+    @Test
+    public void deleteAddress() {
+        Person person = this.personService.create(PersonUnitTests.factoryPersonRequestDto());
+        Address address = this.addressService.create(AddressUnitTests.factoryAddressRequestDto(), person);
+
+        this.addressService.delete(address);
+
+        assertThatThrownBy(() -> this.addressService.getOne(person, address.getId()))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Recurso não encontrado");
     }
 
     public static AddressRequestDto factoryAddressRequestDto() {

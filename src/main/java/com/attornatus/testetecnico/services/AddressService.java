@@ -14,11 +14,11 @@ public interface AddressService {
 
     Address edit(AddressRequestDto dto, Address address);
 
-    Address editMainAddress(Person person, Long id);
+    Address editMainAddress(Address address);
 
     Address getOne(Person person, Long id);
 
     List<Address> getAll(Person person, int page);
 
-    void delete(Person person, Long id);
+    void delete(Address address);
 }
