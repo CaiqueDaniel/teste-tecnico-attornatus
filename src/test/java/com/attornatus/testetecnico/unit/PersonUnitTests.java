@@ -87,6 +87,11 @@ public class PersonUnitTests {
 
         personAndAddressRequestDto.nome = "Teste";
         personAndAddressRequestDto.data_nascimento = LocalDate.parse("2000-01-01");
+        personAndAddressRequestDto.cidade_principal = "São Paulo";
+        personAndAddressRequestDto.estado_principal = "São Paulo";
+        personAndAddressRequestDto.logradouro_principal = "Rua teste";
+        personAndAddressRequestDto.cep_principal = "03808-000";
+        personAndAddressRequestDto.numero_principal = "123";
 
         return personAndAddressRequestDto;
     }
