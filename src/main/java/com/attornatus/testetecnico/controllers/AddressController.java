@@ -6,6 +6,7 @@ import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.services.AddressService;
 import com.attornatus.testetecnico.services.PersonService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,19 @@ public class AddressController {
     private AddressService addressService;
 
     @PostMapping("/pessoas/{person_id}/enderecos")
-    public ResponseEntity<AddressReponseDto> create(@RequestBody AddressRequestDto addressRequestDto, @PathVariable("person_id") Long personId) {
+    public ResponseEntity<AddressReponseDto> create(@RequestBody @Valid AddressRequestDto addressRequestDto, @PathVariable("person_id") Long personId) {
         Person person = this.personService.getOne(personId);
         Address address = this.addressService.create(addressRequestDto, person);
 
         return new ResponseEntity<>(new AddressReponseDto(address), HttpStatus.CREATED);
     }
+
+    @GetMapping("/pessoas/{person_id}/enderecos/{id}")
+    public ResponseEntity<AddressReponseDto> getOne(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
+        Person person = this.personService.getOne(personId);
+        Address address = this.addressService.getOne(person, id);
+
+        return ResponseEntity.ok(new AddressReponseDto(address));
+    }
+
 }

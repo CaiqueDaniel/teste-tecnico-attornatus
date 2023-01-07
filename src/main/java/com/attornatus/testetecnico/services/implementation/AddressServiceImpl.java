@@ -4,6 +4,7 @@ import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
+import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.repositories.AddressRepository;
 import com.attornatus.testetecnico.services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,12 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address getOne(Person person, Long id) {
-        return null;
+        Optional<Address> response = this.addressRepository.findOneByPersonAndId(person, id);
+
+        if (response.isEmpty())
+            throw new NotFoundException();
+
+        return response.get();
     }
 
     @Override
