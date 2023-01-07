@@ -32,6 +32,19 @@ public class AddressController {
         return new ResponseEntity<>(new AddressReponseDto(address), HttpStatus.CREATED);
     }
 
+    @PutMapping("/pessoas/{person_id}/enderecos/{id}")
+    public ResponseEntity<AddressReponseDto> edit(
+            @RequestBody @Valid AddressRequestDto addressRequestDto,
+            @PathVariable("person_id") Long personId,
+            @PathVariable("id") Long id
+    ) {
+        Person person = this.personService.getOne(personId);
+        Address address = this.addressService.getOne(person, id);
+        address = this.addressService.edit(addressRequestDto, address);
+
+        return ResponseEntity.ok(new AddressReponseDto(address));
+    }
+
     @GetMapping("/pessoas/{person_id}/enderecos/{id}")
     public ResponseEntity<AddressReponseDto> getOne(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
         Person person = this.personService.getOne(personId);

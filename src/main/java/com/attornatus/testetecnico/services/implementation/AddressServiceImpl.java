@@ -45,7 +45,14 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address edit(AddressRequestDto dto, Address address) {
-        return null;
+        address.setStreet(dto.logradouro);
+        address.setNumber(dto.numero);
+        address.setZipCode(dto.cep);
+        address.setCity(dto.cidade);
+        address.setState(dto.estado);
+        address.setMain(dto.endereco_principal);
+
+        return this.addressRepository.saveAndFlush(address);
     }
 
     @Override
