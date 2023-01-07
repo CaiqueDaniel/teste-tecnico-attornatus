@@ -11,13 +11,13 @@ public class PersonResponseDto {
     public String nome;
     public String data_nascimento;
     public String criado_em;
-    public List<AddressReponseDto> enderecos;
+    public List<AddressResponseDto> enderecos;
 
     public PersonResponseDto(Person person, List<Address> addresses) {
         this.id = person.getId();
         this.nome = person.getName();
         this.data_nascimento = person.getBirthdate().toString();
         this.criado_em = person.getCreatedAt().toString();
-        this.enderecos = addresses.stream().map(address -> new AddressReponseDto(address)).collect(Collectors.toList());
+        this.enderecos = addresses.stream().map(address -> new AddressResponseDto(address)).collect(Collectors.toList());
     }
 }

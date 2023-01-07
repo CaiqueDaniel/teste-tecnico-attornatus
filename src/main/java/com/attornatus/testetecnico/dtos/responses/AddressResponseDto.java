@@ -2,7 +2,7 @@ package com.attornatus.testetecnico.dtos.responses;
 
 import com.attornatus.testetecnico.entities.Address;
 
-public class AddressReponseDto {
+public class AddressResponseDto {
     public Long id;
     public String logradouro;
     public String cep;
@@ -12,7 +12,7 @@ public class AddressReponseDto {
 
     public boolean endereco_principal;
 
-    public AddressReponseDto(Address address) {
+    public AddressResponseDto(Address address) {
         this.id = address.getId();
         this.cidade = address.getCity();
         this.estado = address.getState();

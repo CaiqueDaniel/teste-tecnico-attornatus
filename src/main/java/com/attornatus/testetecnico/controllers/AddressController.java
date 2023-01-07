@@ -1,7 +1,7 @@
 package com.attornatus.testetecnico.controllers;
 
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
-import com.attornatus.testetecnico.dtos.responses.AddressReponseDto;
+import com.attornatus.testetecnico.dtos.responses.AddressResponseDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.services.AddressService;
@@ -25,15 +25,15 @@ public class AddressController {
     private AddressService addressService;
 
     @PostMapping("/pessoas/{person_id}/enderecos")
-    public ResponseEntity<AddressReponseDto> create(@RequestBody @Valid AddressRequestDto addressRequestDto, @PathVariable("person_id") Long personId) {
+    public ResponseEntity<AddressResponseDto> create(@RequestBody @Valid AddressRequestDto addressRequestDto, @PathVariable("person_id") Long personId) {
         Person person = this.personService.getOne(personId);
         Address address = this.addressService.create(addressRequestDto, person);
 
-        return new ResponseEntity<>(new AddressReponseDto(address), HttpStatus.CREATED);
+        return new ResponseEntity<>(new AddressResponseDto(address), HttpStatus.CREATED);
     }
 
     @PutMapping("/pessoas/{person_id}/enderecos/{id}")
-    public ResponseEntity<AddressReponseDto> edit(
+    public ResponseEntity<AddressResponseDto> edit(
             @RequestBody @Valid AddressRequestDto addressRequestDto,
             @PathVariable("person_id") Long personId,
             @PathVariable("id") Long id
@@ -42,36 +42,36 @@ public class AddressController {
         Address address = this.addressService.getOne(person, id);
         address = this.addressService.edit(addressRequestDto, address);
 
-        return ResponseEntity.ok(new AddressReponseDto(address));
+        return ResponseEntity.ok(new AddressResponseDto(address));
     }
 
     @PatchMapping("/pessoas/{person_id}/enderecos/{id}/endereco_principal")
-    public ResponseEntity<AddressReponseDto> editMainAddress(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
+    public ResponseEntity<AddressResponseDto> editMainAddress(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
         Person person = this.personService.getOne(personId);
         Address address = this.addressService.getOne(person, id);
         address = this.addressService.setAsMainAddress(address);
 
-        return ResponseEntity.ok(new AddressReponseDto(address));
+        return ResponseEntity.ok(new AddressResponseDto(address));
     }
 
     @GetMapping("/pessoas/{person_id}/enderecos/{id}")
-    public ResponseEntity<AddressReponseDto> getOne(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
+    public ResponseEntity<AddressResponseDto> getOne(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
         Person person = this.personService.getOne(personId);
         Address address = this.addressService.getOne(person, id);
 
-        return ResponseEntity.ok(new AddressReponseDto(address));
+        return ResponseEntity.ok(new AddressResponseDto(address));
     }
 
     @GetMapping("/pessoas/{person_id}/enderecos")
-    public ResponseEntity<List<AddressReponseDto>> getAll(
+    public ResponseEntity<List<AddressResponseDto>> getAll(
             @PathVariable("person_id") Long personId,
             @RequestParam(name = "pagina", defaultValue = "1") int page
     ) {
         Person person = this.personService.getOne(personId);
-        List<AddressReponseDto> addresses = this.addressService
+        List<AddressResponseDto> addresses = this.addressService
                 .getAll(person, page)
                 .stream()
-                .map(address -> new AddressReponseDto(address))
+                .map(address -> new AddressResponseDto(address))
                 .toList();
 
         return ResponseEntity.ok(addresses);
