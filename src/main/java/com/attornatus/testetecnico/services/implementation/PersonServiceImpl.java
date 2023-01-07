@@ -51,4 +51,9 @@ public class PersonServiceImpl implements PersonService {
 
         return this.personRepository.findAll(pageable).toList();
     }
+
+    @Override
+    public void delete(Person person) {
+        this.personRepository.delete(person);
+    }
 }

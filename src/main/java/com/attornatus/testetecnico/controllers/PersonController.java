@@ -47,4 +47,12 @@ public class PersonController {
     public ResponseEntity<List<Person>> getAll() {
         return ResponseEntity.ok(this.personService.getAll(1));
     }
+
+    @DeleteMapping("/pessoas/{id}")
+    public ResponseEntity<Void> destroy(@PathVariable("id") Long id) {
+        Person person = this.personService.getOne(id);
+        this.personService.delete(person);
+
+        return ResponseEntity.accepted().build();
+    }
 }
