@@ -14,7 +14,7 @@ public interface AddressService {
 
     Address edit(AddressRequestDto dto, Address address);
 
-    Address editMainAddress(Address address);
+    Address setAsMainAddress(Address address);
 
     Address getOne(Person person, Long id);
 

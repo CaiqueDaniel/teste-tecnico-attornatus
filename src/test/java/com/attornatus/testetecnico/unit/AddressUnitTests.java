@@ -94,7 +94,7 @@ public class AddressUnitTests {
         addressRequestDto.endereco_principal = false;
 
         Address address = this.addressService.create(addressRequestDto, person);
-        Address mainAddress = this.addressService.editMainAddress(address);
+        Address mainAddress = this.addressService.setAsMainAddress(address);
 
         assertThat(address.getPerson().getId()).isEqualTo(mainAddress.getPerson().getId());
         assertThat(address.getCity()).isEqualTo(mainAddress.getCity());

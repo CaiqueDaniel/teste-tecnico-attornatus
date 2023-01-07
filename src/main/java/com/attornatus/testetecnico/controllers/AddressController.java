@@ -45,6 +45,15 @@ public class AddressController {
         return ResponseEntity.ok(new AddressReponseDto(address));
     }
 
+    @PatchMapping("/pessoas/{person_id}/enderecos/{id}/endereco_principal")
+    public ResponseEntity<AddressReponseDto> editMainAddress(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
+        Person person = this.personService.getOne(personId);
+        Address address = this.addressService.getOne(person, id);
+        address = this.addressService.setAsMainAddress(address);
+
+        return ResponseEntity.ok(new AddressReponseDto(address));
+    }
+
     @GetMapping("/pessoas/{person_id}/enderecos/{id}")
     public ResponseEntity<AddressReponseDto> getOne(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
         Person person = this.personService.getOne(personId);

@@ -24,16 +24,7 @@ public class AddressServiceImpl implements AddressService {
     public Address create(AddressRequestDto dto, Person person) {
         Address address = new Address(dto, person);
 
-        if (address.isMain()) {
-            Optional<Address> responseMainAddress = this.addressRepository.findOneByPersonAndIsMain(person, true);
-
-            if (responseMainAddress.isPresent()) {
-                Address mainAddress = responseMainAddress.get();
-                mainAddress.setMain(false);
-
-                this.addressRepository.save(mainAddress);
-            }
-        }
+        this.handleMainAddress(address);
 
         return this.addressRepository.saveAndFlush(address);
     }
@@ -52,12 +43,18 @@ public class AddressServiceImpl implements AddressService {
         address.setState(dto.estado);
         address.setMain(dto.endereco_principal);
 
+        this.handleMainAddress(address);
+
         return this.addressRepository.saveAndFlush(address);
     }
 
     @Override
-    public Address editMainAddress(Address address) {
-        return null;
+    public Address setAsMainAddress(Address address) {
+        address.setMain(true);
+
+        this.handleMainAddress(address);
+
+        return this.addressRepository.saveAndFlush(address);
     }
 
     @Override
@@ -83,5 +80,19 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void delete(Address address) {
         this.addressRepository.delete(address);
+    }
+
+    private void handleMainAddress(Address address) {
+        if (!address.isMain())
+            return;
+
+        Optional<Address> responseMainAddress = this.addressRepository.findOneByPersonAndIsMain(address.getPerson(), true);
+
+        if (responseMainAddress.isPresent()) {
+            Address mainAddress = responseMainAddress.get();
+            mainAddress.setMain(false);
+
+            this.addressRepository.save(mainAddress);
+        }
     }
 }
