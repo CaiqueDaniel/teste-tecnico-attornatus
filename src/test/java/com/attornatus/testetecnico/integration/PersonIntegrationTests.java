@@ -1,4 +1,4 @@
-package com.attornatus.testetecnico.unit;
+package com.attornatus.testetecnico.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,13 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PersonTests {
+public class PersonIntegrationTests {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void createPersonTest() throws Exception {
-        String json = PersonTests.asJson(PersonTests.factoryPersonDto());
+        String json = PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonDto());
 
         this.mockMvc.perform(
                         post("/api/pessoas")
@@ -40,7 +40,22 @@ public class PersonTests {
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().json(PersonTests.factoryPostResponse()));
+                .andExpect(content().json(PersonIntegrationTests.factoryPersonResponse()));
+    }
+
+    @Test
+    public void getPersonTest() throws Exception {
+        String json = PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonDto());
+
+        this.mockMvc.perform(
+                post("/api/pessoas")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        this.mockMvc.perform(get("/api/pessoas/1"))
+                .andDo(print())
+                .andExpect(content().json(PersonIntegrationTests.factoryPersonResponse()));
     }
 
     private static Map<String, String> factoryPersonDto() {
@@ -57,7 +72,7 @@ public class PersonTests {
         return data;
     }
 
-    private static String factoryPostResponse() {
+    private static String factoryPersonResponse() {
         List<Map<String, String>> addresses = new ArrayList<>();
         Map<String, String> address = new HashMap<>();
 
@@ -75,7 +90,7 @@ public class PersonTests {
         data.put("data_nascimento", "2000-01-01");
         data.put("enderecos", addresses);
 
-        return PersonTests.asJson(data);
+        return PersonIntegrationTests.asJson(data);
     }
 
     private static String asJson(Object object) throws RuntimeException {
