@@ -1,6 +1,6 @@
 package com.attornatus.testetecnico.unit;
 
-import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.services.PersonService;
 
@@ -41,13 +41,13 @@ public class PersonUnitTests {
         assertThat(person.getBirthdate()).isEqualTo(testPerson.getBirthdate());
     }
 
-    public static PersonRequestDto factoryPersonRequestDto() {
-        PersonRequestDto personRequestDto = new PersonRequestDto();
+    public static PersonAndAddressRequestDto factoryPersonRequestDto() {
+        PersonAndAddressRequestDto personAndAddressRequestDto = new PersonAndAddressRequestDto();
 
-        personRequestDto.nome = "Teste";
-        personRequestDto.data_nascimento = LocalDate.parse("2000-01-01");
+        personAndAddressRequestDto.nome = "Teste";
+        personAndAddressRequestDto.data_nascimento = LocalDate.parse("2000-01-01");
 
-        return personRequestDto;
+        return personAndAddressRequestDto;
     }
 
     public static Person factoryPersonModel() {

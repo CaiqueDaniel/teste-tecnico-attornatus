@@ -1,6 +1,6 @@
 package com.attornatus.testetecnico.entities;
 
-import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Person extends Model {
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    public Person(PersonRequestDto dto) {
+    public Person(PersonAndAddressRequestDto dto) {
         this.name = dto.nome;
         this.birthdate = dto.data_nascimento;
     }

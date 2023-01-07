@@ -1,6 +1,6 @@
 package com.attornatus.testetecnico.services.implementation;
 
-import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.repositories.AddressRepository;
@@ -13,7 +13,7 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
-    public Address create(PersonRequestDto dto, Person person) {
+    public Address create(PersonAndAddressRequestDto dto, Person person) {
         return this.addressRepository.saveAndFlush(new Address(dto, person));
     }
 }

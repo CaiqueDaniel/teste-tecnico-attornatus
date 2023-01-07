@@ -1,13 +1,11 @@
 package com.attornatus.testetecnico.entities;
 
-import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -39,7 +37,7 @@ public class Address extends Model {
     @ManyToOne(cascade = CascadeType.REMOVE)
     private Person person;
 
-    public Address(PersonRequestDto dto, Person person) {
+    public Address(PersonAndAddressRequestDto dto, Person person) {
         this.city = dto.cidade_principal;
         this.state = dto.estado_principal;
         this.street = dto.logradouro_principal;
