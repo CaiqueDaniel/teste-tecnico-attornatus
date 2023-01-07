@@ -24,6 +24,7 @@ public class Person extends Model {
     @Column(nullable = false)
     private LocalDate birthdate;
 
+    @Setter
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<Address> addresses;
 

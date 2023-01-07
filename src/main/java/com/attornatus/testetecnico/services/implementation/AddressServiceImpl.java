@@ -1,7 +1,6 @@
 package com.attornatus.testetecnico.services.implementation;
 
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
-import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.exceptions.NotFoundException;
@@ -27,11 +26,6 @@ public class AddressServiceImpl implements AddressService {
         this.handleMainAddress(address);
 
         return this.addressRepository.saveAndFlush(address);
-    }
-
-    @Override
-    public Address create(PersonAndAddressRequestDto dto, Person person) {
-        return this.addressRepository.saveAndFlush(new Address(dto, person));
     }
 
     @Override

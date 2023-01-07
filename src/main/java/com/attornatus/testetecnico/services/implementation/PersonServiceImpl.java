@@ -2,6 +2,7 @@ package com.attornatus.testetecnico.services.implementation;
 
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.repositories.PersonRepository;
@@ -21,7 +22,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person create(PersonAndAddressRequestDto dto) {
-        return this.personRepository.saveAndFlush(new Person(dto));
+        Person person = new Person(dto);
+        Address address = new Address(dto, person);
+
+        person.setAddresses(List.of(address));
+
+        return this.personRepository.saveAndFlush(person);
     }
 
     @Override
