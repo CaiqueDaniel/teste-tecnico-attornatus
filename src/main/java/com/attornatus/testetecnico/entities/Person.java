@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -22,6 +23,9 @@ public class Person extends Model {
     @Setter
     @Column(nullable = false)
     private LocalDate birthdate;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private List<Address> addresses;
 
     public Person(PersonAndAddressRequestDto dto) {
         this.name = dto.nome;

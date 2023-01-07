@@ -35,7 +35,7 @@ public class Address extends Model {
     private String city;
 
     @Setter
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Person person;
 
     @Setter

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 public abstract class Model {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     protected Long id;
 
