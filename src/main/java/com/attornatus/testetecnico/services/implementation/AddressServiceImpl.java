@@ -56,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address editMainAddress(Person person, Long id) {
+    public Address editMainAddress(Address address) {
         return null;
     }
 
@@ -81,7 +81,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void delete(Person person, Long id) {
-
+    public void delete(Address address) {
+        this.addressRepository.delete(address);
     }
 }

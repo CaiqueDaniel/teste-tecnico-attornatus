@@ -67,4 +67,14 @@ public class AddressController {
 
         return ResponseEntity.ok(addresses);
     }
+
+    @DeleteMapping("/pessoas/{person_id}/enderecos/{id}")
+    public ResponseEntity<Void> destroy(@PathVariable("person_id") Long personId, @PathVariable("id") Long id) {
+        Person person = this.personService.getOne(personId);
+        Address address = this.addressService.getOne(person, id);
+
+        this.addressService.delete(address);
+
+        return ResponseEntity.accepted().build();
+    }
 }
