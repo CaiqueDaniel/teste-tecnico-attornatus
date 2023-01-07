@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class AddressController {
@@ -38,4 +40,18 @@ public class AddressController {
         return ResponseEntity.ok(new AddressReponseDto(address));
     }
 
+    @GetMapping("/pessoas/{person_id}/enderecos")
+    public ResponseEntity<List<AddressReponseDto>> getAll(
+            @PathVariable("person_id") Long personId,
+            @RequestParam(name = "pagina", defaultValue = "1") int page
+    ) {
+        Person person = this.personService.getOne(personId);
+        List<AddressReponseDto> addresses = this.addressService
+                .getAll(person, page)
+                .stream()
+                .map(address -> new AddressReponseDto(address))
+                .toList();
+
+        return ResponseEntity.ok(addresses);
+    }
 }

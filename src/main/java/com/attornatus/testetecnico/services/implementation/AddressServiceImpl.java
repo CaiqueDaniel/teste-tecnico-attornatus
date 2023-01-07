@@ -8,6 +8,8 @@ import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.repositories.AddressRepository;
 import com.attornatus.testetecnico.services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,7 +65,12 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<Address> getAll(Person person, int page) {
-        return null;
+        page = page > 0 ? page : 0;
+
+        Pageable pageable = PageRequest.of(page - 1, 30);
+        Long total = this.addressRepository.countByPerson(person);
+
+        return this.addressRepository.findAllByPerson(person, pageable);
     }
 
     @Override
