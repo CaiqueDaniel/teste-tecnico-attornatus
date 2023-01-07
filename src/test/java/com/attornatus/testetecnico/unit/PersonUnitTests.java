@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @ActiveProfiles("test")
@@ -34,14 +33,13 @@ public class PersonUnitTests {
     @Test
     public void getAllPersons() {
         PersonAndAddressRequestDto personAndAddressRequestDto = PersonUnitTests.factoryPersonRequestDto();
-        List<Person> personTestList = new ArrayList<>();
 
-        personTestList.add(this.personService.create(personAndAddressRequestDto));
+        this.personService.create(personAndAddressRequestDto);
 
         personAndAddressRequestDto.nome = "Teste 2";
         personAndAddressRequestDto.data_nascimento = LocalDate.parse("1970-01-01");
 
-        personTestList.add(this.personService.create(personAndAddressRequestDto));
+        this.personService.create(personAndAddressRequestDto);
 
         List<Person> responsePeople = this.personService.getAll(1);
 
@@ -59,15 +57,16 @@ public class PersonUnitTests {
 
     @Test
     public void editPerson() {
-        Person testPerson = PersonUnitTests.factoryPersonModel();
+        PersonAndAddressRequestDto personAndAddressRequestDto = PersonUnitTests.factoryPersonRequestDto();
+        Person person = this.personService.create(personAndAddressRequestDto);
 
-        testPerson.setName("Teste 2");
-        testPerson.setBirthdate(LocalDate.parse("1999-01-01"));
+        personAndAddressRequestDto.nome = "Teste 2";
+        personAndAddressRequestDto.data_nascimento = LocalDate.parse("1999-01-01");
 
-        Person person = this.personService.edit(PersonUnitTests.factoryPersonRequestDto(), testPerson);
+        person = this.personService.edit(personAndAddressRequestDto, person);
 
-        assertThat(person.getName()).isEqualTo(testPerson.getName());
-        assertThat(person.getBirthdate()).isEqualTo(testPerson.getBirthdate());
+        assertThat(person.getName()).isEqualTo(personAndAddressRequestDto.nome);
+        assertThat(person.getBirthdate()).isEqualTo(personAndAddressRequestDto.data_nascimento);
     }
 
     public static PersonAndAddressRequestDto factoryPersonRequestDto() {
