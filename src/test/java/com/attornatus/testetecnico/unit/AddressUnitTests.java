@@ -30,13 +30,32 @@ public class AddressUnitTests {
         Address addressTest = AddressUnitTests.factoryAddressModel(person);
         Address address = this.addressService.create(AddressUnitTests.factoryAddressRequestDto(), person);
 
-        assertThat(address.getId()).isEqualTo(addressTest.getId());
+        assertThat(address.getPerson().getId()).isEqualTo(addressTest.getPerson().getId());
         assertThat(address.getCity()).isEqualTo(addressTest.getCity());
         assertThat(address.getStreet()).isEqualTo(addressTest.getStreet());
         assertThat(address.getNumber()).isEqualTo(addressTest.getNumber());
         assertThat(address.getState()).isEqualTo(addressTest.getState());
         assertThat(address.getZipCode()).isEqualTo(addressTest.getZipCode());
         assertThat(address.isMain()).isEqualTo(addressTest.isMain());
+    }
+
+    @Test
+    public void createNewMainAddress() {
+        Person person = this.personService.create(PersonUnitTests.factoryPersonRequestDto());
+        Address addressTest = AddressUnitTests.factoryAddressModel(person);
+        Address address = this.addressService.create(AddressUnitTests.factoryAddressRequestDto(), person);
+
+        this.addressService.create(AddressUnitTests.factoryAddressRequestDto(), person);
+
+        address = this.addressService.getOne(person, address.getId());
+
+        assertThat(address.getPerson().getId()).isEqualTo(addressTest.getPerson().getId());
+        assertThat(address.getCity()).isEqualTo(addressTest.getCity());
+        assertThat(address.getStreet()).isEqualTo(addressTest.getStreet());
+        assertThat(address.getNumber()).isEqualTo(addressTest.getNumber());
+        assertThat(address.getState()).isEqualTo(addressTest.getState());
+        assertThat(address.getZipCode()).isEqualTo(addressTest.getZipCode());
+        assertThat(address.isMain()).isEqualTo(false);
     }
 
     @Test
@@ -56,7 +75,7 @@ public class AddressUnitTests {
 
         address = this.addressService.edit(addressRequestDto, address);
 
-        assertThat(address.getId()).isEqualTo(addressTest.getId());
+        assertThat(address.getPerson().getId()).isEqualTo(addressTest.getPerson().getId());
         assertThat(address.getCity()).isEqualTo(addressTest.getCity());
         assertThat(address.getStreet()).isEqualTo(addressTest.getStreet());
         assertThat(address.getNumber()).isEqualTo(addressTest.getNumber());
@@ -71,7 +90,7 @@ public class AddressUnitTests {
         Address address = this.addressService.create(AddressUnitTests.factoryAddressRequestDto(), person);
         Address responseAddress = this.addressService.getOne(person, address.getId());
 
-        assertThat(address.getId()).isEqualTo(responseAddress.getId());
+        assertThat(address.getPerson().getId()).isEqualTo(responseAddress.getPerson().getId());
         assertThat(address.getCity()).isEqualTo(responseAddress.getCity());
         assertThat(address.getStreet()).isEqualTo(responseAddress.getStreet());
         assertThat(address.getNumber()).isEqualTo(responseAddress.getNumber());

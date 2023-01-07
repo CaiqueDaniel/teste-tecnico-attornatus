@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "addresses")
 public class Address extends Model {
     @Setter
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String street;
 
     @Setter
@@ -27,11 +27,11 @@ public class Address extends Model {
     private String number;
 
     @Setter
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String state;
 
     @Setter
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String city;
 
     @Setter
