@@ -14,4 +14,6 @@ public interface PersonService {
     Person getOne(Long id);
 
     List<Person> getAll(int page);
+
+    void delete(Person person);
 }

@@ -2,9 +2,11 @@ package com.attornatus.testetecnico.unit;
 
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.entities.Person;
+import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.services.PersonService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,17 @@ public class PersonUnitTests {
 
         assertThat(person.getName()).isEqualTo(personAndAddressRequestDto.nome);
         assertThat(person.getBirthdate()).isEqualTo(personAndAddressRequestDto.data_nascimento);
+    }
+
+    @Test
+    public void deletePerson() {
+        Person person = this.personService.create(PersonUnitTests.factoryPersonRequestDto());
+
+        this.personService.delete(person);
+
+        assertThatThrownBy(() -> this.personService.getOne(person.getId()))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Recurso não encontrado");
     }
 
     public static PersonAndAddressRequestDto factoryPersonRequestDto() {
