@@ -42,4 +42,9 @@ public class PersonController {
 
         return new ResponseEntity<Person>(this.personService.edit(personRequestDto, person), HttpStatus.OK);
     }
+
+    @GetMapping("/pessoas")
+    public ResponseEntity<List<Person>> getAll() {
+        return ResponseEntity.ok(this.personService.getAll(1));
+    }
 }

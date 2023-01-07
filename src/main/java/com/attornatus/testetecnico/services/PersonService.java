@@ -13,5 +13,5 @@ public interface PersonService {
 
     Person getOne(Long id);
 
-    List<Person> getAll();
+    List<Person> getAll(int page);
 }

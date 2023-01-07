@@ -7,6 +7,8 @@ import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.repositories.PersonRepository;
 import com.attornatus.testetecnico.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +43,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getAll() {
-        return null;
+    public List<Person> getAll(int page) {
+        page = page > 0 ? page : 0;
+
+        Pageable pageable = PageRequest.of(page - 1, 30);
+        Long total = this.personRepository.count();
+
+        return this.personRepository.findAll(pageable).toList();
     }
 }
