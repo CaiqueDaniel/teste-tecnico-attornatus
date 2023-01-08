@@ -73,7 +73,6 @@ public class PersonIntegrationTests {
     }
 
     private static String factoryPersonResponse() {
-        List<Map<String, String>> addresses = new ArrayList<>();
         Map<String, String> address = new HashMap<>();
 
         address.put("cidade", "São Paulo");
@@ -82,13 +81,11 @@ public class PersonIntegrationTests {
         address.put("logradouro", "Rua teste");
         address.put("numero", "123");
 
-        addresses.add(address);
-
         Map<String, Object> data = new HashMap<>();
 
         data.put("nome", "Teste");
         data.put("data_nascimento", "2000-01-01");
-        data.put("enderecos", addresses);
+        data.put("endereco_principal", address);
 
         return PersonIntegrationTests.asJson(data);
     }
