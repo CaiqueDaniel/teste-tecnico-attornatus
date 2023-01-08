@@ -129,7 +129,7 @@ public class PersonIntegrationTests {
         return personAndAddressRequestDto;
     }
 
-    private static Map<String, Object> factoryPersonResponse() {
+    public static Map<String, Object> factoryPersonResponse() {
         Map<String, String> address = new HashMap<>();
 
         address.put("cidade", "São Paulo");
@@ -147,7 +147,7 @@ public class PersonIntegrationTests {
         return data;
     }
 
-    private static String factoryPersonResponseAsJson() {
+    public static String factoryPersonResponseAsJson() {
         return PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonResponse());
     }
 
