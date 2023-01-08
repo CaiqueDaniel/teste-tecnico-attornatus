@@ -99,7 +99,8 @@ public class AddressIntegrationTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*]").isNotEmpty());
+                .andExpect(jsonPath("$.meta").isNotEmpty())
+                .andExpect(jsonPath("$.data[*]").isNotEmpty());
     }
 
     @Test

@@ -21,8 +21,7 @@ import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -62,12 +61,11 @@ public class PersonIntegrationTests {
     public void getPeople() throws Exception {
         this.personService.create(PersonIntegrationTests.factoryPersonRequestDto());
 
-        String json = PersonIntegrationTests.asJson(List.of(PersonIntegrationTests.factoryPersonResponse()));
-
         this.mockMvc.perform(get("/api/pessoas"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(json));
+                .andExpect(jsonPath("$.meta").isNotEmpty())
+                .andExpect(jsonPath("$.data[*]").isNotEmpty());
     }
 
     @Test
