@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 @Tag(name = "Pessoas")
 public class PersonController {
