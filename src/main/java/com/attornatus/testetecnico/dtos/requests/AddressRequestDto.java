@@ -1,6 +1,7 @@
 package com.attornatus.testetecnico.dtos.requests;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class AddressRequestDto {
@@ -10,6 +11,7 @@ public class AddressRequestDto {
 
     @NotEmpty(message = "CEP não pode ficar em branco.")
     @Size(max = 9, message = "Tamanho máximo do CEP é 9 caracteres.")
+    @Pattern(regexp = "\\d{5}-\\d{3}", message = "O CEP deve manter o padrão 99999-999.")
     public String cep;
 
     @NotEmpty(message = "Número não pode ficar em branco.")

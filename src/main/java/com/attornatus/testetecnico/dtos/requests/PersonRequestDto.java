@@ -2,6 +2,7 @@ package com.attornatus.testetecnico.dtos.requests;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -12,5 +13,6 @@ public class PersonRequestDto {
     public String nome;
 
     @NotNull(message = "Data de nascimento é obrigatório.")
+    @PastOrPresent(message = "Data de nascimento inválida.")
     public LocalDate data_nascimento;
 }
