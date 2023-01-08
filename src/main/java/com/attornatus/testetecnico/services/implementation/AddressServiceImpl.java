@@ -62,6 +62,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public Optional<Address> getMainAddress(Person person) {
+        return this.addressRepository.findOneByPersonAndIsMain(person, true);
+    }
+
+    @Override
     public List<Address> getAll(Person person, int page) {
         page = page > 0 ? page : 0;
 

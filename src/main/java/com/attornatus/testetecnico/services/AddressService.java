@@ -5,6 +5,7 @@ import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AddressService {
     Address create(AddressRequestDto dto, Person person);
@@ -14,6 +15,8 @@ public interface AddressService {
     Address setAsMainAddress(Address address);
 
     Address getOne(Person person, Long id);
+
+    Optional<Address> getMainAddress(Person person);
 
     List<Address> getAll(Person person, int page);
 
