@@ -34,3 +34,6 @@ Clean Code;
 
 ### Endpoints
 Os endpoints estão declarados em [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) (após a inicialização da aplicação) e também podem ser encontrados em **Collection Teste Técnico.json**.
+
+### Aplicação
+Para iniciar da aplicação, basta importar o projeto na IDE, baixar as dependências do Maven e excecutar a classe **src/main/java/com/attornatus/testetecnico/TesteTecnicoApplication.java**
