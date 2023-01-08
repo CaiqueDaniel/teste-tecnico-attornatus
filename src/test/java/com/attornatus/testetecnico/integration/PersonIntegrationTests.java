@@ -1,5 +1,8 @@
 package com.attornatus.testetecnico.integration;
 
+import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
+import com.attornatus.testetecnico.entities.Person;
+import com.attornatus.testetecnico.services.PersonService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -11,13 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,9 +31,12 @@ public class PersonIntegrationTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private PersonService personService;
+
     @Test
-    public void createPersonTest() throws Exception {
-        String json = PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonDto());
+    public void createPerson() throws Exception {
+        String json = PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonMap());
 
         this.mockMvc.perform(
                         post("/api/pessoas")
@@ -40,25 +45,63 @@ public class PersonIntegrationTests {
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().json(PersonIntegrationTests.factoryPersonResponse()));
+                .andExpect(content().json(PersonIntegrationTests.factoryPersonResponseAsJson()));
     }
 
     @Test
-    public void getPersonTest() throws Exception {
-        String json = PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonDto());
+    public void getPerson() throws Exception {
+        Person person = this.personService.create(PersonIntegrationTests.factoryPersonRequestDto());
 
-        this.mockMvc.perform(
-                post("/api/pessoas")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
-
-        this.mockMvc.perform(get("/api/pessoas/1"))
+        this.mockMvc.perform(get("/api/pessoas/" + person.getId()))
                 .andDo(print())
-                .andExpect(content().json(PersonIntegrationTests.factoryPersonResponse()));
+                .andExpect(status().isOk())
+                .andExpect(content().json(PersonIntegrationTests.factoryPersonResponseAsJson()));
     }
 
-    private static Map<String, String> factoryPersonDto() {
+    @Test
+    public void getPeople() throws Exception {
+        this.personService.create(PersonIntegrationTests.factoryPersonRequestDto());
+
+        String json = PersonIntegrationTests.asJson(List.of(PersonIntegrationTests.factoryPersonResponse()));
+
+        this.mockMvc.perform(get("/api/pessoas"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+    }
+
+    @Test
+    public void editPerson() throws Exception {
+        Person person = this.personService.create(PersonIntegrationTests.factoryPersonRequestDto());
+
+        Map<String, Object> responseTest = PersonIntegrationTests.factoryPersonResponse();
+        responseTest.put("nome", "Teste 2");
+        responseTest.put("data_nascimento", "1999-01-01");
+
+        Map<String, String> content = new HashMap<>();
+        content.put("nome", "Teste 2");
+        content.put("data_nascimento", "1999-01-01");
+
+        this.mockMvc.perform(
+                        put("/api/pessoas/" + person.getId())
+                                .content(PersonIntegrationTests.asJson(content))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(PersonIntegrationTests.asJson(responseTest)));
+    }
+
+    @Test
+    public void deletePerson() throws Exception {
+        Person person = this.personService.create(PersonIntegrationTests.factoryPersonRequestDto());
+
+        this.mockMvc.perform(delete("/api/pessoas/" + person.getId()))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+    }
+
+    private static Map<String, String> factoryPersonMap() {
         Map<String, String> data = new HashMap<>();
 
         data.put("nome", "Teste");
@@ -72,7 +115,21 @@ public class PersonIntegrationTests {
         return data;
     }
 
-    private static String factoryPersonResponse() {
+    public static PersonAndAddressRequestDto factoryPersonRequestDto() {
+        PersonAndAddressRequestDto personAndAddressRequestDto = new PersonAndAddressRequestDto();
+
+        personAndAddressRequestDto.nome = "Teste";
+        personAndAddressRequestDto.data_nascimento = LocalDate.parse("2000-01-01");
+        personAndAddressRequestDto.cidade_principal = "São Paulo";
+        personAndAddressRequestDto.estado_principal = "São Paulo";
+        personAndAddressRequestDto.logradouro_principal = "Rua teste";
+        personAndAddressRequestDto.cep_principal = "03800-000";
+        personAndAddressRequestDto.numero_principal = "123";
+
+        return personAndAddressRequestDto;
+    }
+
+    private static Map<String, Object> factoryPersonResponse() {
         Map<String, String> address = new HashMap<>();
 
         address.put("cidade", "São Paulo");
@@ -87,7 +144,11 @@ public class PersonIntegrationTests {
         data.put("data_nascimento", "2000-01-01");
         data.put("endereco_principal", address);
 
-        return PersonIntegrationTests.asJson(data);
+        return data;
+    }
+
+    private static String factoryPersonResponseAsJson() {
+        return PersonIntegrationTests.asJson(PersonIntegrationTests.factoryPersonResponse());
     }
 
     private static String asJson(Object object) throws RuntimeException {
