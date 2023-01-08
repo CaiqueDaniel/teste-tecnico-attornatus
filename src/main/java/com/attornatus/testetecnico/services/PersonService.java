@@ -2,9 +2,9 @@ package com.attornatus.testetecnico.services;
 
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
+import com.attornatus.testetecnico.dtos.responses.PersonResponseDto;
 import com.attornatus.testetecnico.entities.Person;
-
-import java.util.List;
 
 public interface PersonService {
     Person create(PersonAndAddressRequestDto dto);
@@ -13,7 +13,7 @@ public interface PersonService {
 
     Person getOne(Long id);
 
-    List<Person> getAll(int page);
+    PaginationResponse<PersonResponseDto> getAll(int page);
 
     void delete(Person person);
 }

@@ -2,6 +2,7 @@ package com.attornatus.testetecnico.controllers;
 
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
 import com.attornatus.testetecnico.dtos.responses.PersonResponseDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -51,14 +51,10 @@ public class PersonController {
     }
 
     @GetMapping("/pessoas")
-    public ResponseEntity<List<PersonResponseDto>> getAll() {
-        List<PersonResponseDto> personResponseDtos = this.personService
-                .getAll(1)
-                .stream()
-                .map(person -> {
-                    Optional<Address> address = this.addressService.getMainAddress(person);
-                    return new PersonResponseDto(person, address);
-                }).toList();
+    public ResponseEntity<PaginationResponse<PersonResponseDto>> getAll(
+            @RequestParam(name = "pagina", defaultValue = "1") int page
+    ) {
+        PaginationResponse<PersonResponseDto> personResponseDtos = this.personService.getAll(page);
 
         return ResponseEntity.ok(personResponseDtos);
     }

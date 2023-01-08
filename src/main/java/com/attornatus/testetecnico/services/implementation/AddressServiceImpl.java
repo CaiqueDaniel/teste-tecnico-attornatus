@@ -1,6 +1,9 @@
 package com.attornatus.testetecnico.services.implementation;
 
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
+import com.attornatus.testetecnico.dtos.responses.AddressResponseDto;
+import com.attornatus.testetecnico.dtos.responses.MetaData;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.exceptions.NotFoundException;
@@ -67,13 +70,20 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> getAll(Person person, int page) {
-        page = page > 0 ? page : 0;
+    public PaginationResponse<AddressResponseDto> getAll(Person person, int page) {
+        page = page > 1 ? page : 1;
 
         Pageable pageable = PageRequest.of(page - 1, 30);
         Long total = this.addressRepository.countByPerson(person);
+        MetaData meta = new MetaData("/api/pessoas/" + person.getId() + "/enderecos", page, 30, total);
 
-        return this.addressRepository.findAllByPerson(person, pageable);
+        List<AddressResponseDto> addressResponseDtos = this.addressRepository
+                .findAllByPerson(person, pageable)
+                .stream()
+                .map(address -> new AddressResponseDto(address))
+                .toList();
+
+        return new PaginationResponse<>(meta, addressResponseDtos);
     }
 
     @Override

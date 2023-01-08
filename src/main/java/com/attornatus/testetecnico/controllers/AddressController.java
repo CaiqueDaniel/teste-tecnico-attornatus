@@ -2,6 +2,7 @@ package com.attornatus.testetecnico.controllers;
 
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
 import com.attornatus.testetecnico.dtos.responses.AddressResponseDto;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.services.AddressService;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -63,18 +62,14 @@ public class AddressController {
     }
 
     @GetMapping("/pessoas/{person_id}/enderecos")
-    public ResponseEntity<List<AddressResponseDto>> getAll(
+    public ResponseEntity<PaginationResponse<AddressResponseDto>> getAll(
             @PathVariable("person_id") Long personId,
             @RequestParam(name = "pagina", defaultValue = "1") int page
     ) {
         Person person = this.personService.getOne(personId);
-        List<AddressResponseDto> addresses = this.addressService
-                .getAll(person, page)
-                .stream()
-                .map(address -> new AddressResponseDto(address))
-                .toList();
+        PaginationResponse<AddressResponseDto> response = this.addressService.getAll(person, page);
 
-        return ResponseEntity.ok(addresses);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/pessoas/{person_id}/enderecos/{id}")

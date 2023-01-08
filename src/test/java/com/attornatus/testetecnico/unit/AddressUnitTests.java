@@ -1,6 +1,8 @@
 package com.attornatus.testetecnico.unit;
 
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
+import com.attornatus.testetecnico.dtos.responses.AddressResponseDto;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.exceptions.NotFoundException;
@@ -14,8 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -136,9 +136,9 @@ public class AddressUnitTests {
 
         this.addressService.create(addressRequestDto, person);
 
-        List<Address> addresses = this.addressService.getAll(person, 1);
+        PaginationResponse<AddressResponseDto> addressesResponse = this.addressService.getAll(person, 1);
 
-        assertThat(addresses).isNotEmpty();
+        assertThat(addressesResponse.data).isNotEmpty();
     }
 
     @Test

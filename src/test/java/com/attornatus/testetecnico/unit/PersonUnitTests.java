@@ -1,6 +1,8 @@
 package com.attornatus.testetecnico.unit;
 
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
+import com.attornatus.testetecnico.dtos.responses.PersonResponseDto;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.services.PersonService;
@@ -14,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -43,9 +44,9 @@ public class PersonUnitTests {
 
         this.personService.create(personAndAddressRequestDto);
 
-        List<Person> responsePeople = this.personService.getAll(1);
+        PaginationResponse<PersonResponseDto> responsePeople = this.personService.getAll(1);
 
-        assertThat(responsePeople).isNotEmpty();
+        assertThat(responsePeople.data).isNotEmpty();
     }
 
     @Test

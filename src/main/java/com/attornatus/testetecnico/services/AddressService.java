@@ -1,10 +1,11 @@
 package com.attornatus.testetecnico.services;
 
 import com.attornatus.testetecnico.dtos.requests.AddressRequestDto;
+import com.attornatus.testetecnico.dtos.responses.AddressResponseDto;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface AddressService {
@@ -18,7 +19,7 @@ public interface AddressService {
 
     Optional<Address> getMainAddress(Person person);
 
-    List<Address> getAll(Person person, int page);
+    PaginationResponse<AddressResponseDto> getAll(Person person, int page);
 
     void delete(Address address);
 }

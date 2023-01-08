@@ -2,10 +2,14 @@ package com.attornatus.testetecnico.services.implementation;
 
 import com.attornatus.testetecnico.dtos.requests.PersonAndAddressRequestDto;
 import com.attornatus.testetecnico.dtos.requests.PersonRequestDto;
+import com.attornatus.testetecnico.dtos.responses.MetaData;
+import com.attornatus.testetecnico.dtos.responses.PaginationResponse;
+import com.attornatus.testetecnico.dtos.responses.PersonResponseDto;
 import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.exceptions.NotFoundException;
 import com.attornatus.testetecnico.repositories.PersonRepository;
+import com.attornatus.testetecnico.services.AddressService;
 import com.attornatus.testetecnico.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +23,9 @@ import java.util.Optional;
 public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private AddressService addressService;
 
     @Override
     public Person create(PersonAndAddressRequestDto dto) {
@@ -49,13 +56,21 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getAll(int page) {
-        page = page > 0 ? page : 0;
+    public PaginationResponse<PersonResponseDto> getAll(int page) {
+        page = page > 1 ? page : 1;
 
         Pageable pageable = PageRequest.of(page - 1, 30);
         Long total = this.personRepository.count();
+        MetaData meta = new MetaData("/api/pessoas", page, 30, total);
 
-        return this.personRepository.findAll(pageable).toList();
+        List<PersonResponseDto> personResponseDtos = this.personRepository
+                .findAll(pageable)
+                .map(person -> {
+                    Optional<Address> address = this.addressService.getMainAddress(person);
+                    return new PersonResponseDto(person, address);
+                }).toList();
+
+        return new PaginationResponse<>(meta, personResponseDtos);
     }
 
     @Override
