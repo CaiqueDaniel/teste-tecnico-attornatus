@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
+    private static final int RESPONSE_LIMIT = 30;
     @Autowired
     private AddressRepository addressRepository;
 
@@ -73,9 +74,14 @@ public class AddressServiceImpl implements AddressService {
     public PaginationResponse<AddressResponseDto> getAll(Person person, int page) {
         page = page > 1 ? page : 1;
 
-        Pageable pageable = PageRequest.of(page - 1, 30);
+        Pageable pageable = PageRequest.of(page - 1, AddressServiceImpl.RESPONSE_LIMIT);
         Long total = this.addressRepository.countByPerson(person);
-        MetaData meta = new MetaData("/api/pessoas/" + person.getId() + "/enderecos", page, 30, total);
+        MetaData meta = new MetaData(
+                "/api/pessoas/" + person.getId() + "/enderecos",
+                page,
+                AddressServiceImpl.RESPONSE_LIMIT,
+                total
+        );
 
         List<AddressResponseDto> addressResponseDtos = this.addressRepository
                 .findAllByPerson(person, pageable)

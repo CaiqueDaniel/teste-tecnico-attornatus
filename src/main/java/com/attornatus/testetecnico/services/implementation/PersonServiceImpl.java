@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @Service
 public class PersonServiceImpl implements PersonService {
+    private static final int RESPONSE_LIMIT = 30;
     @Autowired
     private PersonRepository personRepository;
 
@@ -59,9 +60,9 @@ public class PersonServiceImpl implements PersonService {
     public PaginationResponse<PersonResponseDto> getAll(int page) {
         page = page > 1 ? page : 1;
 
-        Pageable pageable = PageRequest.of(page - 1, 30);
+        Pageable pageable = PageRequest.of(page - 1, PersonServiceImpl.RESPONSE_LIMIT);
         Long total = this.personRepository.count();
-        MetaData meta = new MetaData("/api/pessoas", page, 30, total);
+        MetaData meta = new MetaData("/api/pessoas", page, PersonServiceImpl.RESPONSE_LIMIT, total);
 
         List<PersonResponseDto> personResponseDtos = this.personRepository
                 .findAll(pageable)
