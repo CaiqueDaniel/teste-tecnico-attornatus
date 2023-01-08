@@ -8,6 +8,15 @@ import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.services.AddressService;
 import com.attornatus.testetecnico.services.PersonService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Pessoas")
 public class PersonController {
     @Autowired
     private PersonService personService;
@@ -26,6 +36,14 @@ public class PersonController {
     private AddressService addressService;
 
     @PostMapping("/pessoas")
+    @Parameters({
+            @Parameter(
+                    in = ParameterIn.HEADER,
+                    name = "Content-Type",
+                    schema = @Schema(type = "string", allowableValues = {"application/json"}, defaultValue = "application/json"),
+                    required = true
+            )
+    })
     public ResponseEntity<PersonResponseDto> create(@RequestBody @Valid PersonAndAddressRequestDto dto) {
         Person person = this.personService.create(dto);
 
@@ -33,6 +51,14 @@ public class PersonController {
     }
 
     @PutMapping("/pessoas/{id}")
+    @Parameters({
+            @Parameter(
+                    in = ParameterIn.HEADER,
+                    name = "Content-Type",
+                    schema = @Schema(type = "string", allowableValues = {"application/json"}, defaultValue = "application/json"),
+                    required = true
+            )
+    })
     public ResponseEntity<PersonResponseDto> edit(@RequestBody @Valid PersonRequestDto personRequestDto, @PathVariable("id") Long id) {
         Person person = this.personService.getOne(id);
         person = this.personService.edit(personRequestDto, person);

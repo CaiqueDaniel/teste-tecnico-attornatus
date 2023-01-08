@@ -7,6 +7,11 @@ import com.attornatus.testetecnico.entities.Address;
 import com.attornatus.testetecnico.entities.Person;
 import com.attornatus.testetecnico.services.AddressService;
 import com.attornatus.testetecnico.services.PersonService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Endereços")
 public class AddressController {
 
     @Autowired
@@ -24,6 +30,14 @@ public class AddressController {
     private AddressService addressService;
 
     @PostMapping("/pessoas/{person_id}/enderecos")
+    @Parameters({
+            @Parameter(
+                    in = ParameterIn.HEADER,
+                    name = "Content-Type",
+                    schema = @Schema(type = "string", allowableValues = {"application/json"}, defaultValue = "application/json"),
+                    required = true
+            )
+    })
     public ResponseEntity<AddressResponseDto> create(@RequestBody @Valid AddressRequestDto addressRequestDto, @PathVariable("person_id") Long personId) {
         Person person = this.personService.getOne(personId);
         Address address = this.addressService.create(addressRequestDto, person);
@@ -32,6 +46,14 @@ public class AddressController {
     }
 
     @PutMapping("/pessoas/{person_id}/enderecos/{id}")
+    @Parameters({
+            @Parameter(
+                    in = ParameterIn.HEADER,
+                    name = "Content-Type",
+                    schema = @Schema(type = "string", allowableValues = {"application/json"}, defaultValue = "application/json"),
+                    required = true
+            )
+    })
     public ResponseEntity<AddressResponseDto> edit(
             @RequestBody @Valid AddressRequestDto addressRequestDto,
             @PathVariable("person_id") Long personId,
