@@ -33,10 +33,18 @@ public class PersonController {
     }
 
     @PutMapping("/pessoas/{id}")
-    public ResponseEntity<PersonResponseDto> edit(@RequestBody PersonRequestDto personRequestDto, @PathVariable("id") Long id) {
+    public ResponseEntity<PersonResponseDto> edit(@RequestBody @Valid PersonRequestDto personRequestDto, @PathVariable("id") Long id) {
         Person person = this.personService.getOne(id);
         person = this.personService.edit(personRequestDto, person);
 
+        Optional<Address> address = this.addressService.getMainAddress(person);
+
+        return ResponseEntity.ok(new PersonResponseDto(person, address));
+    }
+
+    @GetMapping("/pessoas/{id}")
+    public ResponseEntity<PersonResponseDto> getOne(@PathVariable("id") Long id) {
+        Person person = this.personService.getOne(id);
         Optional<Address> address = this.addressService.getMainAddress(person);
 
         return ResponseEntity.ok(new PersonResponseDto(person, address));
